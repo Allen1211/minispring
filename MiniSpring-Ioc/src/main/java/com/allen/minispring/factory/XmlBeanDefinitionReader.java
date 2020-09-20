@@ -3,6 +3,7 @@ package com.allen.minispring.factory;
 import com.allen.minispring.beans.*;
 import com.allen.minispring.exception.BeanDefinitionReadException;
 import com.allen.minispring.io.Resource;
+import com.allen.minispring.utils.IOUtil;
 import com.allen.minispring.utils.ReflectionUtil;
 import com.allen.minispring.utils.StringUtils;
 import org.slf4j.Logger;
@@ -77,10 +78,11 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
     private Document openDocument(Resource resource) throws BeanDefinitionReadException {
 
         InputStream is = null;
-
-        try (InputStream inputStream = resource.getInputStream()) {
-            is = inputStream;
+        try {
+            is = resource.getInputStream();
         } catch (IOException e) {
+            e.printStackTrace();
+            IOUtil.closeSilently(is);
             throw new BeanDefinitionReadException("resource's InputSteam failed to open!", e);
         }
 
@@ -90,10 +92,10 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
             factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
             DocumentBuilder builder = factory.newDocumentBuilder();
             return builder.parse(is);
-        } catch (IOException e) {
-            throw new BeanDefinitionReadException("resource's InputSteam failed to open!", e);
         } catch (Exception e) {
             throw new BeanDefinitionReadException("DocumentReader failed to init! Caused by :" + e.getClass(), e);
+        }finally {
+            IOUtil.closeSilently(is);
         }
 
     }
