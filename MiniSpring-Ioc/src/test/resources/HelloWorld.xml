@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+
+    <bean id="timeHolder" name="timeHolder" class="com.allen.minispring.test.example.TimeHolder" scope="prototype"/>
+
+    <bean id="helloWorld" name="helloWorld" class="com.allen.minispring.test.example.HelloWorld">
+        <constructor-arg name="greeting" value="Hello MiniSpring!" class="java.lang.String"/>
+        <property name="timeHolder" ref="timeHolder"/>
+    </bean>
+
+</beans>
