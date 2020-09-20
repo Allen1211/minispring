@@ -106,6 +106,7 @@ public class BeanDefinition {
         this.protoType = !singleton;
         this.constructorArgumentValues = new ConstructorArgumentValues();
         this.propertyValues = new PropertyValues();
+        this.enableEarlyExpose = true;
     }
 
     /**
