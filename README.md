@@ -35,7 +35,7 @@ A simple IoC and AOP container implement refer to spring-framework.
 minispring基于`jdk1.8.0_201`，使用maven构建，使用IntelliJ IDEA开发。
 
 ``` shell
-$ git clone 
+$ git clone https://github.com/Allen1211/minispring.git
 
 $ mvn clean install
 ```
@@ -92,13 +92,9 @@ $ mvn clean install
 
 待补充
 
-
-
 ## API
 
 待补充
-
-
 
 ## Change Log
 
@@ -111,10 +107,9 @@ $ mvn clean install
 - 通过BeanFactory根据BeanName获取Bean示例。
 
 
-
 ## Maintainers
 
-[@Allen0x4bb](https://github.com/Allen0x4bb)
+[@Allen1211](https://github.com/Allen1211)
 
 ## Contributing
 
