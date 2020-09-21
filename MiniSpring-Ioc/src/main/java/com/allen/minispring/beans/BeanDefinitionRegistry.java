@@ -28,6 +28,20 @@ public interface BeanDefinitionRegistry {
     BeanDefinition getBeanDefinition(String beanName) throws NoSuchBeanDefinitionException;
 
     /**
+     * 根据类型从Bean定义注册中心获取Bean定义.
+     * @param clazz 类型
+     * @return 所有与该类型匹配的bean定义
+     */
+    BeanDefinition[] getBeanDefinition(Class<?> clazz);
+
+    /**
+     * 返回类型与clazz匹配的所有BeanDefinition的名字
+     * @param clazz class对象
+     * @return 类型与clazz匹配的所有BeanDefinition的名字
+     */
+    String[] getBeanDefinitionNamesByType(Class<?> clazz);
+
+    /**
      * 判断Bean定义注册中心是否包括给定名称的Bean定义
      */
     boolean containsBeanDefinition(String beanName);

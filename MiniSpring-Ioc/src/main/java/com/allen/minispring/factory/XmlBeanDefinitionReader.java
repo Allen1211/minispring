@@ -81,7 +81,6 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
         try {
             is = resource.getInputStream();
         } catch (IOException e) {
-            e.printStackTrace();
             IOUtil.closeSilently(is);
             throw new BeanDefinitionReadException("resource's InputSteam failed to open!", e);
         }

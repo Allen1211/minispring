@@ -4,6 +4,7 @@ import com.allen.minispring.beans.*;
 import com.allen.minispring.exception.BeanCreationException;
 import com.allen.minispring.exception.BeansException;
 import com.allen.minispring.exception.NoSuchBeanDefinitionException;
+import com.allen.minispring.utils.Assert;
 import com.allen.minispring.utils.ReflectionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,12 +59,21 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry implements 
 
     @Override
     public <T> T getBean(Class<T> requiredType) throws BeansException {
-        throw new UnsupportedOperationException();
+        return getBean(requiredType, (Object[])(null));
     }
 
     @Override
     public <T> T getBean(Class<T> requiredType, Object... args) throws BeansException {
-        throw new UnsupportedOperationException();
+        Assert.notNull(requiredType, "RequiredType must not be null");
+        String[] candidateNames = beanDefinitionRegistry.getBeanDefinitionNamesByType(requiredType);
+        if(candidateNames.length == 0){
+            throw new NoSuchBeanDefinitionException(requiredType);
+        }
+        if(candidateNames.length > 1){
+            throw new BeansException("More than one candidate of type: " + requiredType);
+        }
+        String beanName = candidateNames[0];
+        return doGetBean(beanName,requiredType, args);
     }
 
     @Override
@@ -91,7 +101,8 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry implements 
      * @return 要获取的bean
      * @throws BeansException 获取失败
      */
-    private Object doGetBean(String name, Class<?> clazz, Object... args) throws BeansException {
+    @SuppressWarnings("unchecked")
+    private <T> T doGetBean(String name, Class<T> clazz, Object... args) throws BeansException {
         // 从BeanDefinition注册中心获取该Bean的定义
         BeanDefinition beanDefinition = beanDefinitionRegistry.getBeanDefinition(name);
         Object bean = null;
@@ -106,7 +117,14 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry implements 
             // 多例Bean直接创建并返回
             bean = createBean(name, beanDefinition, clazz, args);
         }
-        return bean;
+
+        // 类型判断和转换
+        if(Objects.nonNull(bean) && Objects.nonNull(clazz) && !clazz.isInstance(bean)){
+            // TODO 类型转换
+            throw new BeansException("bean's type" + bean.getClass() + " not match to " + clazz);
+        }
+
+        return (T) bean;
     }
 
     /**

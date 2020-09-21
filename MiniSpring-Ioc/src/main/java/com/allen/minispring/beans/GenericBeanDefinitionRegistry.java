@@ -2,6 +2,7 @@ package com.allen.minispring.beans;
 
 import com.allen.minispring.exception.BeansException;
 import com.allen.minispring.exception.NoSuchBeanDefinitionException;
+import com.allen.minispring.utils.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,15 +19,20 @@ import java.util.concurrent.ConcurrentHashMap;
 public class GenericBeanDefinitionRegistry implements BeanDefinitionRegistry {
 
     /**
+     * 注册中心容器初始值大小
+     */
+    private static final int DEFAULT_CONTAINER_SIZE = 16;
+
+    /**
      * 实际存储BeanName及其对应的BeanDefinition的映射的容器
      */
     protected final ConcurrentHashMap<String, BeanDefinition> beanDefinitionMap =
-            new ConcurrentHashMap<>(16);
+            new ConcurrentHashMap<>(DEFAULT_CONTAINER_SIZE);
 
     /**
      * 存储已注册的BeanDefinition的BeanName
      */
-    protected final List<String> beanDefinitionNames = new ArrayList<>(16);
+    protected final List<String> beanDefinitionNames = new ArrayList<>(DEFAULT_CONTAINER_SIZE);
 
     @Override
     public void registerBeanDefinition(String beanName, BeanDefinition beanDefinition) {
@@ -37,9 +43,11 @@ public class GenericBeanDefinitionRegistry implements BeanDefinitionRegistry {
             throw new IllegalArgumentException("beanDefinition can not be null");
         }
         if(beanDefinitionMap.containsKey(beanName)){
-            throw new BeansException("BeanDefinition has already resigtered");
+            throw new BeansException("BeanName: " + beanName +" has already registered");
         }
         beanDefinitionMap.put(beanName, beanDefinition);
+
+        this.beanDefinitionNames.add(beanName);
     }
 
     @Override
@@ -65,6 +73,32 @@ public class GenericBeanDefinitionRegistry implements BeanDefinitionRegistry {
     }
 
     @Override
+    public BeanDefinition[] getBeanDefinition(Class<?> clazz) {
+        List<BeanDefinition> result = new ArrayList<>();
+        String[] names = getBeanDefinitionNames();
+        for(String name : names){
+            BeanDefinition beanDefinition = getBeanDefinition(name);
+            if(isTypeMatch(clazz, beanDefinition)){
+                result.add(beanDefinition);
+            }
+        }
+        return result.toArray(new BeanDefinition[0]);
+    }
+
+    @Override
+    public String[] getBeanDefinitionNamesByType(Class<?> clazz) {
+        List<String> result = new ArrayList<>();
+        String[] names = getBeanDefinitionNames();
+        for(String name : names){
+            BeanDefinition beanDefinition = getBeanDefinition(name);
+            if(isTypeMatch(clazz, beanDefinition)){
+                result.add(name);
+            }
+        }
+        return result.toArray(new String[0]);
+    }
+
+    @Override
     public boolean containsBeanDefinition(String beanName) {
         if(Objects.isNull(beanName)){
             throw new IllegalArgumentException("beanName can not be null");
@@ -75,5 +109,9 @@ public class GenericBeanDefinitionRegistry implements BeanDefinitionRegistry {
     @Override
     public String[] getBeanDefinitionNames() {
         return this.beanDefinitionNames.toArray(new String[1]);
+    }
+
+    private boolean isTypeMatch(Class<?> clazz, BeanDefinition beanDefinition) {
+        return beanDefinition.getBeanClass() != null && beanDefinition.getBeanClass().equals(clazz);
     }
 }
