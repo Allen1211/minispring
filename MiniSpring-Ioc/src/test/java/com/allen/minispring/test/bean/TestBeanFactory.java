@@ -5,11 +5,15 @@ import com.allen.minispring.beans.BeanDefinitionRegistry;
 import com.allen.minispring.beans.ConstructorArgumentValues;
 import com.allen.minispring.beans.GenericBeanDefinitionRegistry;
 import com.allen.minispring.exception.BeanDefinitionReadException;
+import com.allen.minispring.exception.BeansException;
+import com.allen.minispring.exception.NoSuchBeanDefinitionException;
 import com.allen.minispring.factory.*;
 import com.allen.minispring.io.ClassPathResource;
 import com.allen.minispring.io.Resource;
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 /**
  * @ClassName TestBeanFactory
@@ -19,6 +23,9 @@ import org.junit.Test;
  * @Version 1.0
  */
 public class TestBeanFactory {
+
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
 
     @Test
     public void testGetBean() {
@@ -157,4 +164,48 @@ public class TestBeanFactory {
 
     }
 
+
+    @Test
+    public void testGetBeanByTypeUnique() throws BeanDefinitionReadException {
+        BeanFactory beanFactory = new XmlBeanFactory("applicationContext.xml");
+
+        A a = beanFactory.getBean(A.class);
+        B b = beanFactory.getBean(B.class);
+
+        Assert.assertNotNull(a);
+        Assert.assertNotNull(a.getB());
+
+        Assert.assertNotNull(b);
+        Assert.assertNotNull(b.getA());
+
+
+        CDPlayer cdPlayer1 = beanFactory.getBean(CDPlayer.class);
+        CDPlayer cdPlayer2 = beanFactory.getBean(CDPlayer.class);
+
+        Assert.assertEquals(cdPlayer1, cdPlayer2);
+
+
+    }
+
+    @Test
+    public void testGetBeanByTypeNotUnique() throws BeanDefinitionReadException {
+
+        thrown.expect(BeansException.class);
+        thrown.expectMessage("More than one candidate of type: " + Person.class);
+
+        BeanFactory beanFactory = new XmlBeanFactory("applicationContext.xml");
+        Person person = beanFactory.getBean(Person.class);
+
+
+        Assert.assertNotNull(person);
+        System.out.println(person);
+
+    }
+
+    @Test(expected = NoSuchBeanDefinitionException.class)
+    public void testGetBeanByTypeNotExist() throws BeanDefinitionReadException {
+        BeanFactory beanFactory = new XmlBeanFactory("applicationContext.xml");
+        beanFactory.getBean(TestBeanFactory.class);
+
+    }
 }
