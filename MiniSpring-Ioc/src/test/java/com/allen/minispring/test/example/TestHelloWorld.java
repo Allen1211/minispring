@@ -3,8 +3,8 @@ package com.allen.minispring.test.example;
 import com.allen.minispring.exception.BeanDefinitionReadException;
 import com.allen.minispring.factory.BeanFactory;
 import com.allen.minispring.factory.XmlBeanFactory;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * @ClassName TestHelloWorld
@@ -20,7 +20,7 @@ public class TestHelloWorld {
 
         HelloWorld helloWorld = (HelloWorld) beanFactory.getBean("helloWorld");
 
-        Assert.assertNotNull(helloWorld);
+        Assertions.assertNotNull(helloWorld);
 
         System.out.println(helloWorld.getGreeting() + " now is " + helloWorld.getTimeHolder());
     }

@@ -10,10 +10,8 @@ import com.allen.minispring.exception.NoSuchBeanDefinitionException;
 import com.allen.minispring.factory.*;
 import com.allen.minispring.io.ClassPathResource;
 import com.allen.minispring.io.Resource;
-import org.junit.Assert;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * @ClassName TestBeanFactory
@@ -23,9 +21,6 @@ import org.junit.rules.ExpectedException;
  * @Version 1.0
  */
 public class TestBeanFactory {
-
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
 
     @Test
     public void testGetBean() {
@@ -43,7 +38,7 @@ public class TestBeanFactory {
 
         System.out.println(mike1.getId() + "---" + mike1.getName());
 
-        Assert.assertEquals(mike1, mike2);
+        Assertions.assertEquals(mike1, mike2);
 
         System.out.println(mike1 == mike2);
     }
@@ -68,14 +63,14 @@ public class TestBeanFactory {
         Person mary1 = (Person) beanFactory.getBean("mary");
         Person mary2 = (Person) beanFactory.getBean("mary");
 
-        Assert.assertNotNull(mike2);
-        Assert.assertNotNull(mike1);
-        Assert.assertNotNull(john);
-        Assert.assertNotNull(mary1);
-        Assert.assertNotNull(mary2);
+        Assertions.assertNotNull(mike2);
+        Assertions.assertNotNull(mike1);
+        Assertions.assertNotNull(john);
+        Assertions.assertNotNull(mary1);
+        Assertions.assertNotNull(mary2);
 
-        Assert.assertSame(mike1, mike2);
-        Assert.assertNotEquals(mary1, mary2);
+        Assertions.assertSame(mike1, mike2);
+        Assertions.assertNotEquals(mary1, mary2);
 
         System.out.println(mike1);
         System.out.println(mike2);
@@ -96,10 +91,10 @@ public class TestBeanFactory {
 
         Disk disk = (Disk) beanFactory.getBean("Luv");
 
-        Assert.assertNotNull(cdPlayer1);
-        Assert.assertNotNull(cdPlayer2);
+        Assertions.assertNotNull(cdPlayer1);
+        Assertions.assertNotNull(cdPlayer2);
 
-        Assert.assertEquals(cdPlayer1, cdPlayer2);
+        Assertions.assertEquals(cdPlayer1, cdPlayer2);
 
         System.out.println(cdPlayer1);
         System.out.println(cdPlayer1 == cdPlayer2);
@@ -115,13 +110,13 @@ public class TestBeanFactory {
         A a = (A) beanFactory.getBean("a");
         B b = (B) beanFactory.getBean("b");
 
-        Assert.assertNotNull(a);
-        Assert.assertNotNull(b);
-        Assert.assertNotNull(a.getB());
-        Assert.assertNotNull(b.getA());
+        Assertions.assertNotNull(a);
+        Assertions.assertNotNull(b);
+        Assertions.assertNotNull(a.getB());
+        Assertions.assertNotNull(b.getA());
 
-        Assert.assertEquals(a.getB(), b);
-        Assert.assertEquals(b.getA(), a);
+        Assertions.assertEquals(a.getB(), b);
+        Assertions.assertEquals(b.getA(), a);
 
         System.out.println(a.getB());
         System.out.println(b.getA());
@@ -134,10 +129,10 @@ public class TestBeanFactory {
 
         Store store = (Store) beanFactory.getBean("store");
 
-        Assert.assertNotNull(store);
+        Assertions.assertNotNull(store);
 
-        Assert.assertNotNull(store.getCounter());
-        Assert.assertNotNull(store.getStaff());
+        Assertions.assertNotNull(store.getCounter());
+        Assertions.assertNotNull(store.getStaff());
 
         System.out.println(store);
     }
@@ -149,18 +144,18 @@ public class TestBeanFactory {
         Store store1 = (Store) beanFactory.getBean("photoTypeStore");
         Store store2 = (Store) beanFactory.getBean("photoTypeStore");
 
-        Assert.assertNotNull(store1);
-        Assert.assertNotNull(store2);
+        Assertions.assertNotNull(store1);
+        Assertions.assertNotNull(store2);
 
-        Assert.assertNotEquals(store1, store2);
+        Assertions.assertNotEquals(store1, store2);
 
-        Assert.assertNotNull(store1.getCounter());
-        Assert.assertNotNull(store1.getStaff());
-        Assert.assertNotNull(store2.getCounter());
-        Assert.assertNotNull(store2.getStaff());
+        Assertions.assertNotNull(store1.getCounter());
+        Assertions.assertNotNull(store1.getStaff());
+        Assertions.assertNotNull(store2.getCounter());
+        Assertions.assertNotNull(store2.getStaff());
 
-        Assert.assertEquals(store1.getStaff(), store2.getStaff());
-        Assert.assertEquals(store1.getCounter(), store2.getCounter());
+        Assertions.assertEquals(store1.getStaff(), store2.getStaff());
+        Assertions.assertEquals(store1.getCounter(), store2.getCounter());
 
     }
 
@@ -172,17 +167,17 @@ public class TestBeanFactory {
         A a = beanFactory.getBean(A.class);
         B b = beanFactory.getBean(B.class);
 
-        Assert.assertNotNull(a);
-        Assert.assertNotNull(a.getB());
+        Assertions.assertNotNull(a);
+        Assertions.assertNotNull(a.getB());
 
-        Assert.assertNotNull(b);
-        Assert.assertNotNull(b.getA());
+        Assertions.assertNotNull(b);
+        Assertions.assertNotNull(b.getA());
 
 
         CDPlayer cdPlayer1 = beanFactory.getBean(CDPlayer.class);
         CDPlayer cdPlayer2 = beanFactory.getBean(CDPlayer.class);
 
-        Assert.assertEquals(cdPlayer1, cdPlayer2);
+        Assertions.assertEquals(cdPlayer1, cdPlayer2);
 
 
     }
@@ -190,22 +185,20 @@ public class TestBeanFactory {
     @Test
     public void testGetBeanByTypeNotUnique() throws BeanDefinitionReadException {
 
-        thrown.expect(BeansException.class);
-        thrown.expectMessage("More than one candidate of type: " + Person.class);
-
         BeanFactory beanFactory = new XmlBeanFactory("applicationContext.xml");
-        Person person = beanFactory.getBean(Person.class);
-
-
-        Assert.assertNotNull(person);
-        System.out.println(person);
+        Assertions.assertThrows(BeansException.class, () -> {
+            beanFactory.getBean(Person.class);
+        }, "More than one candidate of type: " + Person.class);
 
     }
 
-    @Test(expected = NoSuchBeanDefinitionException.class)
+    @Test
     public void testGetBeanByTypeNotExist() throws BeanDefinitionReadException {
         BeanFactory beanFactory = new XmlBeanFactory("applicationContext.xml");
-        beanFactory.getBean(TestBeanFactory.class);
+
+        Assertions.assertThrows(NoSuchBeanDefinitionException.class, ()->{
+            beanFactory.getBean(TestBeanFactory.class);
+        });
 
     }
 }

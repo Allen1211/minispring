@@ -4,6 +4,8 @@ target
 MiniSpring-Ioc/target
 MiniSpring-Utils/target
 
+MiniSpring-Utils/MiniSpring-Utils.iml
+MiniSpring-Ioc/MiniSpring-Ioc.iml
 
 # Compiled class file
 *.class
