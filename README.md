@@ -72,7 +72,7 @@ $ mvn clean install
 
             HelloWorld helloWorld = (HelloWorld) beanFactory.getBean("helloWorld");
 
-            Assert.assertNotNull(helloWorld);
+            Assertions.assertNotNull(helloWorld);
 
             System.out.println(helloWorld.getGreeting() + " now is " + helloWorld.getTimeHolder());
         }
@@ -98,13 +98,22 @@ $ mvn clean install
 
 ## Change Log
 
+### v1.1 (2020/09/22)
+#### Refactor
+
+- 使用`JUnit5` 代替 `JUnit4` 进行测试
+
+#### Features
+
+- BeanFactory支持根据Class对象获取Bean实例
+
 ### v1.0 (2020/09/19)
 
 - Bean定义方式: 通过XML配置文件方式定义Bean。支持定义构造器参数、property参数。
 - Bean作用域: 支持单例(singleton)、多例(phototype)。
 - 依赖注入: 支持构造器依赖注入，setter方法依赖注入。
 - 循环依赖: 支持属性循环依赖。构造器循环依赖将抛异常提示。
-- 通过BeanFactory根据BeanName获取Bean示例。
+- 通过BeanFactory根据BeanName获取Bean实例。
 
 
 ## Maintainers
