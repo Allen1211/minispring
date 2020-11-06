@@ -1,7 +1,11 @@
 package com.allen.minispring.beans;
 
+import com.allen.minispring.beans.propertyeditors.PropertyEditorRegistry;
 import com.allen.minispring.factory.BeanFactory;
+import com.allen.minispring.factory.ConfigurableBeanFactory;
+import com.allen.minispring.factory.config.TypedStringValue;
 
+import java.beans.PropertyEditor;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,28 +27,39 @@ public class BeanDefinitionValueResolver {
         this.beanFactory = beanFactory;
     }
 
-    public Object resolveValue(Object value){
-        if(value instanceof RunTimeReferenceBean){
+    public Object resolveValue(Object value) {
+        if (value instanceof RunTimeReferenceBean) {
             RunTimeReferenceBean rb = (RunTimeReferenceBean) value;
             return this.beanFactory.getBean(rb.getBeanName());
-        }else {
+        } else if (value instanceof TypedStringValue) {
+            if (beanFactory instanceof ConfigurableBeanFactory) {
+                PropertyEditorRegistry editorRegistry = ((ConfigurableBeanFactory) beanFactory).getPropertyEditorRegistry();
+                TypedStringValue typedStringValue = (TypedStringValue) value;
+                PropertyEditor editor = editorRegistry.findPropertyEditor(typedStringValue.getTargetType());
+                editor.setAsText(typedStringValue.getValue());
+                return editor.getValue();
+            } else {
+                throw new RuntimeException("This BeanFactory:" + beanFactory.getClass() +
+                                                   " Cannot resolve TypedStringValue");
+            }
+        } else {
             return value;
         }
     }
 
-    public Object[] resolveValues(Object[] values){
+    public Object[] resolveValues(Object[] values) {
         List<Object> resolvedValues = new ArrayList<>(values.length);
-        for(Object value : values){
+        for (Object value : values) {
             Object resolvedValue = resolveValue(value);
             resolvedValues.add(resolvedValue);
         }
         return resolvedValues.toArray();
     }
 
-    public void resolveValues(ConstructorArgumentValues cav){
+    public void resolveValues(ConstructorArgumentValues cav) {
         List<ConstructorArgumentValues.ArgumentValue> listArgumentValues = cav.getListArgumentValues();
-        for (ConstructorArgumentValues.ArgumentValue ag : listArgumentValues){
-            if(!ag.isConverted()){
+        for (ConstructorArgumentValues.ArgumentValue ag : listArgumentValues) {
+            if (!ag.isConverted()) {
                 Object value = resolveValue(ag.getValue());
                 ag.setTypeClazz(value.getClass());
                 ag.setValue(value);

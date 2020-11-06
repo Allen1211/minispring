@@ -2,6 +2,7 @@ package com.allen.minispring.factory;
 
 import com.allen.minispring.beans.*;
 import com.allen.minispring.exception.BeanDefinitionReadException;
+import com.allen.minispring.factory.config.TypedStringValue;
 import com.allen.minispring.io.Resource;
 import com.allen.minispring.utils.IOUtil;
 import com.allen.minispring.utils.ReflectionUtil;
@@ -157,16 +158,14 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
              * 处理注入值
              */
             Object value = null;
-            if (StringUtils.notEmpty(className) && StringUtils.notEmpty(valueStr)) {
-                try {
-                    clazz = Class.forName(className);
-                } catch (ClassNotFoundException e) {
-                    throw new BeanDefinitionReadException("ClassNotFound: " + className, e);
-                }
-                value = ReflectionUtil.parseStringToObjectByClass(clazz, valueStr);
-                if (Objects.isNull(value)) {
-                    throw new BeanDefinitionReadException("Can not parse value " + valueStr + " to "
-                                                                  + className);
+            if (StringUtils.notEmpty(valueStr)) {
+                Class<?> propertyClass = ReflectionUtil.getFieldType(beanDefinition.getBeanClass(), name);
+                if(propertyClass == String.class) {
+                    value = valueStr;
+                    clazz = String.class;
+                }else {
+                    value = new TypedStringValue(valueStr, propertyClass);
+                    clazz = TypedStringValue.class;
                 }
             } else if (StringUtils.notEmpty(ref)) {
                 value = new RunTimeReferenceBean(ref);
@@ -206,18 +205,17 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
              * 处理注入值
              */
             Object value = null;
-            if (StringUtils.notEmpty(className) && StringUtils.notEmpty(valueStr)) {
-                try {
-                    clazz = Class.forName(className);
-                } catch (ClassNotFoundException e) {
-                    throw new BeanDefinitionReadException("ClassNotFound: " + className, e);
+            if (StringUtils.notEmpty(valueStr)) {
+                Class<?> propertyClass = ReflectionUtil.getFieldType(beanDefinition.getBeanClass(), name);
+                if(propertyClass == String.class) {
+                    value = valueStr;
+                    clazz = String.class;
+                    converted = true;
+                }else {
+                    value = new TypedStringValue(valueStr, propertyClass);
+                    clazz = TypedStringValue.class;
+                    converted = false;
                 }
-                value = ReflectionUtil.parseStringToObjectByClass(clazz, valueStr);
-                if (Objects.isNull(value)) {
-                    throw new BeanDefinitionReadException("Can not parse value " + valueStr + " to "
-                                                                  + className);
-                }
-                converted = true;
             } else if (StringUtils.notEmpty(ref)) {
                 value = new RunTimeReferenceBean(ref);
                 clazz = RunTimeReferenceBean.class;

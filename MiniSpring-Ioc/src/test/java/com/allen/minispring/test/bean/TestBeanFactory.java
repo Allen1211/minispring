@@ -10,6 +10,7 @@ import com.allen.minispring.exception.NoSuchBeanDefinitionException;
 import com.allen.minispring.factory.*;
 import com.allen.minispring.io.ClassPathResource;
 import com.allen.minispring.io.Resource;
+import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -200,5 +201,17 @@ public class TestBeanFactory {
             beanFactory.getBean(TestBeanFactory.class);
         });
 
+    }
+
+    @Test
+    public void testDefaultPropertyEditor() throws BeanDefinitionReadException {
+        BeanFactory beanFactory = new XmlBeanFactory("applicationContext.xml");
+        Counter counter = beanFactory.getBean(Counter.class);
+        Assertions.assertNotNull(counter);
+        System.out.println(counter);
+
+        Person mike = (Person) beanFactory.getBean("mike");
+        Assertions.assertNotNull(mike);
+        System.out.println(mike);
     }
 }

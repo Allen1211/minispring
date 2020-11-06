@@ -2,33 +2,33 @@
 <beans>
 
     <bean id="mike" name="mike" class="com.allen.minispring.test.bean.Person">
-        <constructor-arg name="id" value="1" class="java.lang.Integer"/>
-        <constructor-arg name="name" value="mike" class="java.lang.String"/>
+        <constructor-arg name="id" value="1"/>
+        <constructor-arg name="name" value="mike"/>
     </bean>
 
     <bean id="john" name="john" class="com.allen.minispring.test.bean.Person">
-        <constructor-arg name="id" value="2" class="java.lang.Integer"/>
-        <constructor-arg name="name" value="john" class="java.lang.String"/>
+        <constructor-arg name="id" value="2"/>
+        <constructor-arg name="name" value="john"/>
     </bean>
 
     <bean id="mary" name="mary" class="com.allen.minispring.test.bean.Person" scope="prototype">
-        <constructor-arg name="id" value="3" class="java.lang.Integer"/>
-        <constructor-arg name="name" value="mary" class="java.lang.String"/>
+        <constructor-arg name="id" value="3"/>
+        <constructor-arg name="name" value="mary"/>
     </bean>
 
     <bean id="cdPlayer" class="com.allen.minispring.test.bean.CDPlayer" scope="singleton">
-        <constructor-arg name="brand" value="Apple" class="java.lang.String"/>
+        <constructor-arg name="brand" value="Apple"/>
         <constructor-arg name="disk" ref="Luv"/>
     </bean>
 
     <bean id="Luv" class="com.allen.minispring.test.bean.Disk">
-        <constructor-arg name="author" value="Nujabes" class="java.lang.String"/>
-        <constructor-arg name="albumName" value="Luv" class="java.lang.String"/>
+        <constructor-arg name="author" value="Nujabes"/>
+        <constructor-arg name="albumName" value="Luv"/>
     </bean>
 
     <bean id="Songs" class="com.allen.minispring.test.bean.Disk">
-        <constructor-arg name="author" value="allen" class="java.lang.String"/>
-        <constructor-arg name="albumName" value="Songs" class="java.lang.String"/>
+        <constructor-arg name="author" value="allen"/>
+        <constructor-arg name="albumName" value="Songs"/>
     </bean>
 
     <bean id="a" class="com.allen.minispring.test.bean.A">
@@ -40,8 +40,10 @@
     </bean>
 
     <bean id="counter" class="com.allen.minispring.test.bean.Counter">
-        <property name="height" value="12.44" class="java.lang.Double"/>
-        <property name="width" value="30.12" class="java.lang.Double"/>
+        <property name="id" value="1"/>
+        <property name="brand" value="Job"/>
+        <property name="height" value="12.44"/>
+        <property name="width" value="30.12"/>
     </bean>
 
     <bean id="store" class="com.allen.minispring.test.bean.Store">

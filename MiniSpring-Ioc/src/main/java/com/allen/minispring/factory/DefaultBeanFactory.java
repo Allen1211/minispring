@@ -1,14 +1,18 @@
 package com.allen.minispring.factory;
 
 import com.allen.minispring.beans.*;
+import com.allen.minispring.beans.propertyeditors.DefaultPropertyEditorRegistry;
+import com.allen.minispring.beans.propertyeditors.PropertyEditorRegistry;
 import com.allen.minispring.exception.BeanCreationException;
 import com.allen.minispring.exception.BeansException;
 import com.allen.minispring.exception.NoSuchBeanDefinitionException;
 import com.allen.minispring.utils.Assert;
+import com.allen.minispring.utils.ClassUtil;
 import com.allen.minispring.utils.ReflectionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.beans.PropertyEditor;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Parameter;
 import java.util.HashMap;
@@ -23,7 +27,7 @@ import java.util.Objects;
  * @Date 2020/9/4
  * @Version 1.0
  */
-public class DefaultBeanFactory extends DefaultSingletonBeanRegistry implements BeanFactory {
+public class DefaultBeanFactory extends DefaultSingletonBeanRegistry implements ConfigurableBeanFactory {
 
     private static final Logger logger = LoggerFactory.getLogger(DefaultBeanFactory.class);
 
@@ -37,9 +41,12 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry implements 
      */
     protected final BeanDefinitionValueResolver beanDefinitionValueResolver;
 
+    protected PropertyEditorRegistry propertyEditorRegistry;
+
     public DefaultBeanFactory() {
         this.beanDefinitionRegistry = new GenericBeanDefinitionRegistry();
         this.beanDefinitionValueResolver = new BeanDefinitionValueResolver(this);
+        this.propertyEditorRegistry = new DefaultPropertyEditorRegistry();
     }
 
     public DefaultBeanFactory(BeanDefinitionRegistry beanDefinitionRegistry) {
@@ -305,5 +312,15 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry implements 
                                                         " bean " + clazz, e, beanDefinition.getBeanName());
             }
         }
+    }
+
+    @Override
+    public void registerCustomEditor(Class<?> requiredType, PropertyEditor propertyEditor) {
+        this.propertyEditorRegistry.registerCustomEditor(requiredType, propertyEditor);
+    }
+
+    @Override
+    public PropertyEditorRegistry getPropertyEditorRegistry() {
+        return this.propertyEditorRegistry;
     }
 }

@@ -2,6 +2,7 @@ package com.allen.minispring.utils;
 
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
@@ -48,6 +49,16 @@ public class ReflectionUtil {
         String setMethodName = "set" + propertyName.substring(0, 1).toUpperCase() + propertyName.substring(1);
         Method setMethod = clazz.getMethod(setMethodName, propertyVal.getClass());
         setMethod.invoke(object, propertyVal);
+    }
+
+    public static Class<?> getFieldType(Class<?> clazz, String fieldName){
+        try {
+            Field field = clazz.getDeclaredField(fieldName);
+            return field.getType();
+        } catch (NoSuchFieldException e) {
+            return null;
+        }
+
     }
 
 }

@@ -9,6 +9,8 @@ package com.allen.minispring.test.bean;
  */
 public class Counter {
 
+    private Integer id;
+    private String brand;
     private Double height;
     private Double width;
 
@@ -28,10 +30,28 @@ public class Counter {
         this.width = width;
     }
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
+
     @Override
     public String toString() {
         return "Counter{" +
-                "height=" + height +
+                "id=" + id +
+                ", brand='" + brand + '\'' +
+                ", height=" + height +
                 ", width=" + width +
                 '}';
     }
