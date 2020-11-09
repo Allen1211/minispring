@@ -4,6 +4,7 @@
     <bean id="mike" name="mike" class="com.allen.minispring.test.bean.Person">
         <constructor-arg name="id" value="1"/>
         <constructor-arg name="name" value="mike"/>
+        <property name="scores" value="4.0,4.6,3.9"/>
     </bean>
 
     <bean id="john" name="john" class="com.allen.minispring.test.bean.Person">
@@ -19,6 +20,7 @@
     <bean id="cdPlayer" class="com.allen.minispring.test.bean.CDPlayer" scope="singleton">
         <constructor-arg name="brand" value="Apple"/>
         <constructor-arg name="disk" ref="Luv"/>
+        <property name="status" value="6,23,12,50"/>
     </bean>
 
     <bean id="Luv" class="com.allen.minispring.test.bean.Disk">
@@ -50,6 +52,7 @@
         <constructor-arg name="cdPlayer" ref="cdPlayer"/>
         <property name="counter" ref="counter"/>
         <property name="staff" ref="mike"/>
+        <property name="levels" value="A,C,B,D"/>
     </bean>
 
     <bean id="photoTypeStore" class="com.allen.minispring.test.bean.Store" scope="prototype">

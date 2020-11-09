@@ -2,6 +2,8 @@ package com.allen.minispring.test.bean;
 
 import com.allen.minispring.test.bean.*;
 
+import java.util.Arrays;
+
 /**
  * @ClassName Store
  * @Description
@@ -13,6 +15,7 @@ public class Store {
     private CDPlayer cdPlayer;
     private Counter counter;
     private Person staff;
+    private char[] levels;
 
     public Store(CDPlayer cdPlayer) {
         this.cdPlayer = cdPlayer;
@@ -34,12 +37,21 @@ public class Store {
         this.staff = staff;
     }
 
+    public char[] getLevels() {
+        return levels;
+    }
+
+    public void setLevels(char[] levels) {
+        this.levels = levels;
+    }
+
     @Override
     public String toString() {
         return "Store{" +
                 "cdPlayer=" + cdPlayer +
                 ", counter=" + counter +
                 ", staff=" + staff +
+                ", levels=" + Arrays.toString(levels) +
                 '}';
     }
 }

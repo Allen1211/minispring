@@ -18,32 +18,37 @@ import java.util.Objects;
  */
 public class DefaultPropertyEditorRegistry implements PropertyEditorRegistry {
 
-    protected Map<Class<?>, PropertyEditor> defaultEditors;
+    protected Map<Class<?>, PropertyEditor> customEditors = new HashMap<>();
 
-    protected Map<Class<?>, PropertyEditor> customEditors;
+    protected Map<Class<?>, PropertyEditor> defaultEditors = new HashMap<Class<?>, PropertyEditor>() {{
+        put(byte.class, new NumberCustomEditor(Byte.class, false));
+        put(Byte.class, new NumberCustomEditor(Byte.class, true));
+        put(short.class, new NumberCustomEditor(Short.class, false));
+        put(Short.class, new NumberCustomEditor(Short.class, true));
+        put(int.class, new NumberCustomEditor(Integer.class, false));
+        put(Integer.class, new NumberCustomEditor(Integer.class, true));
+        put(long.class, new NumberCustomEditor(Long.class, false));
+        put(Long.class, new NumberCustomEditor(Long.class, true));
+        put(float.class, new NumberCustomEditor(Float.class, false));
+        put(Float.class, new NumberCustomEditor(Float.class, true));
+        put(double.class, new NumberCustomEditor(Double.class, false));
+        put(Double.class, new NumberCustomEditor(Double.class, true));
+        put(BigDecimal.class, new NumberCustomEditor(BigDecimal.class, true));
+        put(BigInteger.class, new NumberCustomEditor(BigInteger.class, true));
+
+        put(short[].class, new StringArrayCustomEditor(short[].class));
+        put(Short[].class, new StringArrayCustomEditor(Short[].class));
+        put(int[].class, new StringArrayCustomEditor(int[].class));
+        put(Integer[].class, new StringArrayCustomEditor(Integer[].class));
+        put(long[].class, new StringArrayCustomEditor(long[].class));
+        put(Long[].class, new StringArrayCustomEditor(Long[].class));
+        put(float[].class, new StringArrayCustomEditor(float[].class));
+        put(Float[].class, new StringArrayCustomEditor(Float[].class));
+        put(double[].class, new StringArrayCustomEditor(double[].class));
+        put(Double[].class, new StringArrayCustomEditor(Double[].class));
+    }};
 
     public DefaultPropertyEditorRegistry() {
-        this.defaultEditors = new HashMap<>();
-        this.customEditors = new HashMap<>();
-
-        initDefaultEditors();
-    }
-
-    private void initDefaultEditors(){
-        this.defaultEditors.put(byte.class, new CustomNumberEditor(Byte.class, false));
-        this.defaultEditors.put(Byte.class, new CustomNumberEditor(Byte.class, true));
-        this.defaultEditors.put(short.class, new CustomNumberEditor(Short.class, false));
-        this.defaultEditors.put(Short.class, new CustomNumberEditor(Short.class, true));
-        this.defaultEditors.put(int.class, new CustomNumberEditor(Integer.class, false));
-        this.defaultEditors.put(Integer.class, new CustomNumberEditor(Integer.class, true));
-        this.defaultEditors.put(long.class, new CustomNumberEditor(Long.class, false));
-        this.defaultEditors.put(Long.class, new CustomNumberEditor(Long.class, true));
-        this.defaultEditors.put(float.class, new CustomNumberEditor(Float.class, false));
-        this.defaultEditors.put(Float.class, new CustomNumberEditor(Float.class, true));
-        this.defaultEditors.put(double.class, new CustomNumberEditor(Double.class, false));
-        this.defaultEditors.put(Double.class, new CustomNumberEditor(Double.class, true));
-        this.defaultEditors.put(BigDecimal.class, new CustomNumberEditor(BigDecimal.class, true));
-        this.defaultEditors.put(BigInteger.class, new CustomNumberEditor(BigInteger.class, true));
     }
 
     @Override
@@ -59,7 +64,7 @@ public class DefaultPropertyEditorRegistry implements PropertyEditorRegistry {
             return null;
         }
         PropertyEditor propertyEditor = customEditors.get(requiredType);
-        if(Objects.isNull(propertyEditor)) {
+        if (Objects.isNull(propertyEditor)) {
             propertyEditor = defaultEditors.get(requiredType);
         }
         return propertyEditor;

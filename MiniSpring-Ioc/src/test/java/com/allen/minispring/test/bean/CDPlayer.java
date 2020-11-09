@@ -1,5 +1,7 @@
 package com.allen.minispring.test.bean;
 
+import java.util.Arrays;
+
 /**
  * @ClassName CDPlayer
  * @Description
@@ -12,6 +14,8 @@ public class CDPlayer {
     private String brand;
 
     private Disk disk;
+
+    private Integer[] status;
 
     public CDPlayer(String brand, Disk disk) {
         this.brand = brand;
@@ -34,11 +38,21 @@ public class CDPlayer {
         this.disk = disk;
     }
 
+    public Integer[] getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer[] status) {
+        this.status = status;
+    }
+
+
     @Override
     public String toString() {
         return "CDPlayer{" +
                 "brand='" + brand + '\'' +
-                ", disk=" + disk.toString() +
+                ", disk=" + disk +
+                ", status=" + Arrays.toString(status) +
                 '}';
     }
 }

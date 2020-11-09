@@ -8,11 +8,16 @@ import com.allen.minispring.exception.BeanDefinitionReadException;
 import com.allen.minispring.exception.BeansException;
 import com.allen.minispring.exception.NoSuchBeanDefinitionException;
 import com.allen.minispring.factory.*;
+import com.allen.minispring.factory.config.CustomEditorConfigurer;
 import com.allen.minispring.io.ClassPathResource;
 import com.allen.minispring.io.Resource;
-import org.junit.Assert;
+import com.allen.minispring.beans.propertyeditors.StringArrayCustomEditor;
+import com.allen.minispring.test.config.StringArrayToCharArrayCustomEditor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.beans.PropertyEditor;
+import java.util.HashMap;
 
 /**
  * @ClassName TestBeanFactory
@@ -213,5 +218,33 @@ public class TestBeanFactory {
         Person mike = (Person) beanFactory.getBean("mike");
         Assertions.assertNotNull(mike);
         System.out.println(mike);
+    }
+
+    @Test
+    public void testBeanFactoryPostProcessor() throws BeanDefinitionReadException {
+        BeanFactory beanFactory = new XmlBeanFactory("applicationContext.xml");
+        CustomEditorConfigurer customEditorConfigurer = new CustomEditorConfigurer();
+        HashMap<Class<?>, PropertyEditor> customEditors = new HashMap<Class<?>, PropertyEditor>(){{
+            put(int[].class, new StringArrayCustomEditor(int[].class));
+            put(Integer[].class, new StringArrayCustomEditor(Integer[].class));
+            put(Double[].class, new StringArrayCustomEditor(Double[].class));
+            put(double[].class, new StringArrayCustomEditor(double[].class));
+            put(char[].class, new StringArrayToCharArrayCustomEditor(char[].class));
+            put(Character[].class, new StringArrayToCharArrayCustomEditor(Character[].class));
+        }};
+        customEditorConfigurer.setCustomEditors(customEditors);
+        customEditorConfigurer.postProcessBeanFactory((ConfigurableBeanFactory) beanFactory);
+
+        CDPlayer cdPlayer = beanFactory.getBean(CDPlayer.class);
+        Assertions.assertNotNull(cdPlayer);
+        System.out.println(cdPlayer);
+
+        Person mike = (Person) beanFactory.getBean("mike");
+        Assertions.assertNotNull(mike);
+        System.out.println(mike);
+
+        Store store = (Store) beanFactory.getBean("store");
+        Assertions.assertNotNull(store);
+        System.out.println(store);
     }
 }

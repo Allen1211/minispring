@@ -14,13 +14,13 @@ import java.util.Objects;
  * @Date 2020/11/6
  * @Version 1.0
  */
-public class CustomNumberEditor extends PropertyEditorSupport {
+public class NumberCustomEditor extends PropertyEditorSupport {
 
     private final Class<? extends Number> numberClass;
 
     private final boolean allowNull;
 
-    public CustomNumberEditor(Class<? extends Number> numberClass, boolean allowNull) {
+    public NumberCustomEditor(Class<? extends Number> numberClass, boolean allowNull) {
         this.numberClass = numberClass;
         this.allowNull = allowNull;
     }

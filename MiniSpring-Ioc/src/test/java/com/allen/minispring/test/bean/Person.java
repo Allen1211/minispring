@@ -1,5 +1,7 @@
 package com.allen.minispring.test.bean;
 
+import java.util.Arrays;
+
 /**
  * @ClassName Person
  * @Description
@@ -12,6 +14,8 @@ public class Person {
     private Integer id;
 
     private String name;
+
+    private double[] scores;
 
     public Person() {
         this.id = -1;
@@ -39,11 +43,20 @@ public class Person {
         this.name = name;
     }
 
+    public double[] getScores() {
+        return scores;
+    }
+
+    public void setScores(double[] scores) {
+        this.scores = scores;
+    }
+
     @Override
     public String toString() {
         return "Person{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
+                ", scores=" + Arrays.toString(scores) +
                 '}';
     }
 }

@@ -2,7 +2,7 @@ package com.allen.minispring.factory.config;
 
 /**
  * @ClassName TypedStringValue
- * @Description
+ * @Description 包装一个字符串及其要解析成的类型
  * @Author XianChuLun
  * @Date 2020/11/6
  * @Version 1.0

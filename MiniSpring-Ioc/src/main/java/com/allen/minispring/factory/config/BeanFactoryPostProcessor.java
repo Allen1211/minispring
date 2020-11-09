@@ -1,6 +1,6 @@
 package com.allen.minispring.factory.config;
 
-import com.allen.minispring.factory.BeanFactory;
+import com.allen.minispring.factory.ConfigurableBeanFactory;
 
 /**
  * @ClassName BeanFactoryPostProcessor
@@ -16,5 +16,5 @@ public interface BeanFactoryPostProcessor {
      * 对BeanFactory做出修改
      * @param beanFactory BeanFactory
      */
-    void postProcessBeanFactory(BeanFactory beanFactory);
+    void postProcessBeanFactory(ConfigurableBeanFactory beanFactory);
 }
